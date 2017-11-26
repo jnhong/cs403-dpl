@@ -172,10 +172,10 @@ Most terms have their usual meaning, but the following may be considered particu
   - relational
     - logical or, `or` or `+`, left, 1
         - short-circuiting
-        - non-`false` values are treated as `true`
+        - For typing reasons, the behavior of `+` slightly differs from `or` in that it returns `true` if either operand evaluates to `true` and returns `false` if both operands evaluate to `false`, whereas for `or`, non-`false` values are treated as `true`. This is for type checking operands of the addition operator.
     - logical and, `and` or `*`, left, 2
         - short-circuiting
-        - non-`false` values are treated as `true`
+        - For typing reasons, the behavior of `*` slightly differs from `and` in that it returns `false` if either operand evaluates to `false` and returns `true` if both operands evaluate to `true`, whereas for `and`, non-`false` values are treated as `true`. This is for type checking the operands of the multiplication operator.
     - equals, `=`, left, 3
     - not-equals, `~=`, left, 3
     - less-than, `<`, left, 4
