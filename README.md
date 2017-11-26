@@ -7,6 +7,7 @@ println("Hello, world!"),
 
 ### Examples
 Here are some examples of 403 code with ranging complexities. These examples can be found in `examples.403`.
+Note: `==` is the assignment operator in 403, not the equality operator, which is `=`. They are switched in 403 on the grounds that this way appears more like conventional mathematics and discourages careless assignment.
 ```
 ! simple
 square(x) := x * x :;
@@ -113,7 +114,7 @@ Most terms have their usual meaning, but the following may be considered particu
     - `x,`
     - `x + 2,`
     - `x == x + 2,`
-      - `==` is the assignment operator in 403, not the equality operator, which is `=`. They are switched in 403 on the grounds that this appears more like conventional mathematics and discourages careless assignment.
+      - `==` is the assignment operator in 403, not the equality operator, which is `=`. They are switched in 403 on the grounds that this way appears more like conventional mathematics and discourages careless assignment.
     - `print(x),`
 
 ### Comments
