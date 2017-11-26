@@ -77,7 +77,7 @@ More examples are given in the `.403` files.
     - `403 program.403`
 - The conventional filename extension for 403 code is `.403`.
 - executable information (output of `file 403`):
-  - ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 2.6.32, BuildID[sha1]=be282c884e01e66b5d846dde4af884c35d240d20, not stripped
+  - ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 2.6.32, BuildID[sha1]=0d925514fe385cf5a79fbac807cffd91c8b2d43f, not stripped
 - options
   - The `-p` option pretty-prints the input program.
 
