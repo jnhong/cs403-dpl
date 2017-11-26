@@ -315,6 +315,7 @@ Most terms have their usual meaning, but the following may be considered particu
   - `car(arg)` - returns the car of the pair `arg`
   - `cdr(arg)` - returns the cdr of the pair `arg`
   - `display_env(arg)` - displays the given environment
+    - To get the current environment, use the keyword `this`.
   - `sizeof(arg)` - returns the number of elements allocated to array `arg`
   - `is_uninitialized(arg)` - returns `true` if variable `arg` is `UNINITIALIZED`, `false` otherwise
   - `is_array(arg)` - returns `true` if `arg` is an array object, `false` otherwise
