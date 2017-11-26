@@ -6,7 +6,7 @@ println("Hello, world!"),
 ```
 
 ### Examples
-Here are some examples of 403 code of various complexities. These examples can be found in `examples.403`.
+Here are some examples of 403 code with ranging complexities. These examples can be found in `examples.403`.
 ```
 ! simple
 square(x) := x * x :;
