@@ -1,0 +1,60 @@
+! an example of passing a function
+
+f(x) := x * x :;
+
+l := list(1, 2, 3) :;
+
+map :=
+    lambda[ f, l :
+            if[ l = nil ?
+                nil
+              : else
+                cons(f(car(l)), map(f,cdr(l)))
+              ]
+          ]
+    :;
+
+println( map(f,l) ),
+
+! an example of returning a nested function
+
+new_account(balance) :=
+    withdraw(amount) :=
+        if[ amount > balance ?
+            println("not enough funds")
+          : else
+            println("withdrawing ", amount, "..."),
+            balance == balance - amount,
+            println("new balance is ", balance)
+          ]
+        :;
+    deposit(amount) :=
+        if[ amount < 0 ?
+            println("can't deposit negative dollars")
+          : else
+            println("depositing ", amount, "..."),
+            balance == balance + amount,
+            println("new balance is ", balance)
+          ]
+        :;
+    dispatch(action) :=
+        if[ action = "withdraw" ?
+            withdraw
+          : action = "deposit" ?
+            deposit
+          : else
+            println("action ", action, " is not recognized")
+          ]
+        :;
+    dispatch
+    :;
+
+bank_account := new_account(100.00) :;
+
+bank_account("withdraw")(20.00),
+
+bank_account("deposit")(10.75),
+
+bank_account("withdraw")(1000),
+
+bank_account("deposit")(-1),

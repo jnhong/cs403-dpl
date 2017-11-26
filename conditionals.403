@@ -1,0 +1,34 @@
+x;
+
+x == if[ 1 < 2 ? true ],
+
+println("x is ", x),
+
+x == if[ 0 = 1 ? 10 : else 20 ] + 5,    ! notice that 5 is being added
+
+println("x is ", x),
+
+! demonstrating more than 2 cases
+x == if[ x < 0 ?
+         "first case"
+       : x = 0 ?
+         "second case"
+       : x > 0 ?
+         "third case"
+       : else 
+         "impossible"
+       ],
+
+println("x is ", x),
+
+! demonstrating multistatement bodies
+x == if[ x = "third case" ?
+         y := 2 :;
+         y == y + 2,
+         x == y,
+         x * y                          ! should be 16
+       : else
+         "incorrect"
+       ],
+
+println("x is ", x),

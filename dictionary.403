@@ -1,0 +1,230 @@
+avl_tree(comparator) :=
+    
+    root := nil :;
+
+    ! improvised enumeration
+    HEIGHT := 0 :;
+    KEY    := 1 :;
+    VALUE  := 2 :;
+    LEFT   := 3 :;
+    RIGHT  := 4 :;
+
+    ! AVL TREE HELPER FUNCTIONS
+
+    ! node implementation 
+    new_node(key,value) :=
+        ! allocate
+        n := allocate(6) :;
+        ! initialize
+        n[HEIGHT] == 1,
+        n[KEY]    == key,
+        n[VALUE]  == value,
+        n[LEFT]   == nil, 
+        n[RIGHT]  == nil,
+        n
+        :;
+    
+    max(a,b) := if[ a > b ? a : else b ] :;
+
+    height(node) := if[ node = nil ? 0 : else node[HEIGHT] ] :;
+
+    balance(node) :=
+        if[ node = nil ?
+            0
+          : else
+            height(node[LEFT]) - height(node[RIGHT]) 
+          ]
+        :;
+
+    left_rotate(x) :=
+        y := x[RIGHT] :;
+        z := y[LEFT] :;
+        y[LEFT]  == x,
+        x[RIGHT] == z,
+        x[HEIGHT] == max(height(x[LEFT]),height(x[RIGHT])) + 1,
+        y[HEIGHT] == max(height(y[LEFT]),height(y[RIGHT])) + 1,
+        y
+        :;
+    
+    right_rotate(y) :=
+        x := y[LEFT] :;
+        z := x[RIGHT] :;
+        x[RIGHT] == y,
+        y[LEFT]  == z,
+        y[HEIGHT] == max(height(y[LEFT]),height(y[RIGHT])) + 1,
+        x[HEIGHT] == max(height(x[LEFT]),height(x[RIGHT])) + 1,
+        x
+        :;
+
+    search_recurser(node,key) :=
+        if[ node = nil ?
+            nil
+          : comparator(key,node[KEY]) ?
+            search_recurser(node[LEFT],key)
+          : comparator(node[KEY],key) ?
+            search_recurser(node[RIGHT],key)
+          : else
+            node
+          ]
+        :;
+
+    min_node(node) :=
+        while[ : node[LEFT] ~= nil : node == node[LEFT] ],
+        node
+        :;
+
+    ! AVL TREE METHODS
+
+    search(key) :=
+        node := search_recurser(root,key) :;
+        if[ node = nil ?
+            println("key not found!"),
+            nil
+          : else
+            node[VALUE]
+          ]
+        :;
+
+    update(key,value) :=
+        node := search_recurser(root,key) :;
+        if[ node = nil ?
+            println("key not found!"),
+            nil
+          : else
+            node[VALUE] == value
+          ]
+        :;
+
+    insert(key,value) :=
+        insert_recurser(node,key,value) :=
+            if[ node = nil ? return new_node(key,value) ],
+            if[ comparator(key,node[KEY]) ?
+                node[LEFT] == insert_recurser(node[LEFT],key,value)
+              : comparator(node[KEY],key) ?
+                node[RIGHT] == insert_recurser(node[RIGHT],key,value)
+              : else
+                return node
+              ],
+            node[HEIGHT] == 1 + max(height(node[LEFT]),height(node[RIGHT])),
+            if[ balance(node) > 1 and comparator(key,node[LEFT][KEY]) ?
+                return right_rotate(node)
+              : balance(node) > 1 and comparator(node[LEFT][KEY],key) ?
+                node[LEFT] == left_rotate(node[LEFT]),
+                return right_rotate(node)
+              : balance(node) < -1 and comparator(node[RIGHT][KEY],key) ?
+                return left_rotate(node)
+              : balance(node) < -1 and comparator(key,node[RIGHT][KEY]) ?
+                node[RIGHT] == right_rotate(node[RIGHT]),
+                return left_rotate(node)
+              ],
+            return node
+            :;
+        root == insert_recurser(root,key,value)
+        :;
+    
+    copy_from(n1,n2) :=
+        i := 0 :;
+        while[ : i < 6 : n1[i] == n2[i], i == i + 1 ]
+        :;
+
+    delete(key) :=
+        delete_recurser(root,key) :=
+            if[ root = nil ? return root ],
+            if[ comparator(key,root[KEY]) ?
+                root[LEFT] == delete_recurser(root[LEFT],key)
+              : comparator(root[KEY],key) ?
+                root[RIGHT] == delete_recurser(root[RIGHT],key)
+              : else
+                if[ root[LEFT] = nil or root[RIGHT] = nil ?
+                    temp := if[ root[LEFT] = nil ? root[RIGHT] : else root[LEFT] ] :;
+                    if[ temp = nil ?
+                        root == nil
+                      : else
+                        copy_from(root,temp)
+                      ]
+                  : else
+                    temp := min_node(root[RIGHT]) :;
+                    root[KEY] == temp[KEY],
+                    root[RIGHT] == delete_recurser(root[RIGHT],temp[KEY])
+                  ]
+              ],
+            if[ root = nil ? return root ],
+            root[HEIGHT] == 1 + max(height(root[LEFT]),height(root[RIGHT])),
+            if[ balance(root) > 1 and balance(root[LEFT]) >= 0 ?
+                return right_rotate(root)
+              : balance(root) > 1 and balance(root[LEFT]) < 0 ?
+                root[LEFT] == left_rotate(root[LEFT]),
+                return right_rotate(root)
+              : balance(root) < -1 and balance(root[RIGHT]) <= 0 ?
+                return left_rotate(root)
+              : balance(root) < -1 and balance(root[RIGHT]) > 0 ?
+                root[RIGHT] == right_rotate(root[RIGHT]),
+                return left_rotate(root)
+              ],
+            return root
+            :;
+        root == delete_recurser(root,key)
+        :;
+
+    print_inorder_traversal() :=
+        print_recurser(node) :=
+            if[ node not equals nil ?
+                print_recurser(node[LEFT]),
+                println(node[KEY]," : ",node[VALUE]),
+                print_recurser(node[RIGHT])
+              ]
+            :;
+        print_recurser(root)
+        :;
+
+    dispatch(command) :=
+        if[ not is_string(command) ?
+            println("input command is not a string!")
+          ],
+        if[ command = "search" ?
+            search
+          : command = "insert" ?
+            insert
+          : command = "delete" ?
+            delete
+          : command = "update" ?
+            update
+          : command = "print inorder traversal" ?
+            print_inorder_traversal(),
+            nil
+          : else
+            println("command \"", command, "\" is not recognized!"),
+            nil
+          ]
+        :;
+
+    dispatch
+    :;
+
+comparator(x,y) := x < y :;
+
+t := avl_tree(comparator) :;
+
+t("insert")(4,"computer"),
+t("insert")(2,"apple"),
+t("insert")(6,"book"),
+t("insert")(8,"car"),
+t("insert")(11,"phone"),
+t("insert")(9,"engine"),
+t("insert")(1,"rocket"),
+
+t("print inorder traversal"),
+
+println("searching 9 returns ", t("search")(9)),
+println("searching 1 returns ", t("search")(1)),
+
+t("update")(2,"orange"),
+println("after updating 2 to \"orange\", searching 2 returns ", t("search")(2)),
+
+println("attempting to search 3..."),
+t("search")(3),
+
+println("attempting to delete 4..."),
+t("delete")(4),
+
+t("print inorder traversal"),

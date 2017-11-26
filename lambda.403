@@ -1,0 +1,30 @@
+square(x) := x * x :;
+
+f := lambda[x,y: square(x) + square(y)] :;
+
+println("2^2 + 3^2 = ", f(2,3)),
+
+println("81 = ", lambda[: i := 2 :; i == i + 1, integer(i ^ 4) ]() ),
+
+g := lambda[x1: lambda[x2: lambda[x3,y3: x1 + x2 + x3 * y3 ] ] ] :;
+
+x := g(1)(2)(3,4) :;
+
+println("1 + 2 + 3 * 4 = ", x),
+
+! watch this...
+
+h := lambda[ x1 :
+         lambda[ x2, y2 :
+             lambda[ x3 :
+                     a1 := allocate(x1) :;
+                     i := 0 :;
+                     while[ : i < x1 : a1[i] == x2 * y2, i == i + 1 ],
+                     a1[x3] == lambda[ x4 : x4 + "world!" ],
+                     a1
+                   ]
+                ]
+             ]
+         :;
+
+println(h(10)(5.0,6.5)(2)[2]("Hello, ")),

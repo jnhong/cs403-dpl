@@ -1,0 +1,15 @@
+x := return "what the heck?" :;
+
+f(n) := x, n :;             ! typically, being the last expression, n would be returned
+
+println("f(5) is... ", f(5)),
+
+i := 2 :;
+
+g(n) := i == n, return :;
+
+println("i = ", i),
+
+g(5),
+
+println("i = ", i),

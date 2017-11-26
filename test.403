@@ -1,0 +1,9 @@
+x := return 5 :;
+
+f(n) := x, n :;
+
+println("f(n) is ", f(2)),
+
+return 5,
+
+f(x),

@@ -1,0 +1,29 @@
+n := 10 :;
+fibresult;
+
+! using "{}"-block to isolate auxiliary variables
+{
+fib1 := 0 :;
+fib2 := 1 :;
+i := 0 :;
+temporary;
+while[ i == i + 1,
+       temporary == fib1,
+       fib1 == fib2,
+       fib2 == temporary + fib1
+       : i < n :                                ! condition test is in the middle!
+       println("fib(", i, ") is ", fib1)
+     ],
+fibresult == fib1                       ! no comma needed since it is the last
+},                                      ! expression of a "{}"-block body
+
+! side note: "{}"-blocks are considered unaries whose value is its evaluated body
+!            As such, they can be used in larger expressions!
+
+println("finally, fib(", n, ") is ", fibresult),
+
+x := 3 :;
+
+println( x + { i := 2 :; i * i } ),
+
+x + { i := 2 :; i * i },

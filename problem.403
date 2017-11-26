@@ -1,0 +1,52 @@
+stream_display(stream,n) :=
+    helper(stream,i) :=
+        if[ i < n ?
+            println(scar[stream]),
+            helper(scdr[stream],i+1)
+          ]
+        :;
+    helper(stream,0)
+    :;
+
+integers_from(n) := scons[n,integers_from(n+1)] :;
+
+! integers := integers_from(1) :;
+
+! stream_display(integers,10),
+
+stream_filter(predicate,stream) :=
+    if[ is_nil(stream) ?
+        nil
+      : predicate(scar[stream]) ?
+        scons[scar[stream],
+              stream_filter(predicate,scdr[stream])]
+      : else
+        stream_filter(predicate,scdr[stream])
+      ]
+    :;
+
+is_divisible(x,y) := (x % y) = 0 :;
+
+sieve(stream) :=
+    scons[scar[stream],
+          sieve(stream_filter(lambda[x: not is_divisible(x,scar[stream])],
+                              scdr[stream]))
+         ]
+    :;
+
+primes := sieve(integers_from(2)) :;
+
+stream_display(primes,10),
+
+stream_ref(stream,n) :=
+    helper(stream,i) :=
+        if[ i < n ?
+            helper(scdr[stream],i+1)
+          : else
+            stream
+          ]
+        :;
+    scar[helper(stream,1)]
+    :;
+
+println("the 100th prime is ", stream_ref(primes,100)),
