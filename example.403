@@ -22,8 +22,8 @@ println("The 6th fibonacci number is ", fib(6)),
 f := allocate(5) :;
 
 {
-i := 0:;
-j := 0:;
+i := 0 :;
+j := 0 :;
  while[ : i < sizeof(f) :
         j == i mod 2,
         f[i] == lambda[x: lambda[y,z: return x * (y - z) + i * j, return 0]],

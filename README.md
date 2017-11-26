@@ -33,8 +33,8 @@ println("The 6th fibonacci number is ", fib(6)),
 f := allocate(5) :;
 
 {
-i := 0:;
-j := 0:;
+i := 0 :;
+j := 0 :;
  while[ : i < sizeof(f) :
         j == i mod 2,
         f[i] == lambda[x: lambda[y,z: return x * (y - z) + i * j, return 0]],
@@ -80,11 +80,11 @@ More examples are given in the `.403` files.
 - executable information (output of `file 403`):
   - ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 2.6.32, BuildID[sha1]=0d925514fe385cf5a79fbac807cffd91c8b2d43f, not stripped
 - options
-  - The `-p` option pretty-prints the input program.
+  - The `-p` option pretty-prints the input program instead of executing it.
 
 ### Terminology
 Most terms have their usual meaning, but the following may be considered particularities:
-- **body** - a body is a sequence of zero or more statements followed by an expression. The value of the body is considered to be the value of the last expression after evaluating the preceding statements in order.
+- **body** - a body is a sequence of zero or more statements (to be defined below) followed by an expression. The value of the body is considered to be the value of the last expression after evaluating the preceding statements in order.
 
 ### Rules of Thumb
 - Brackets are used to denote special-forms or close relation to special-forms and are used by:
@@ -97,7 +97,7 @@ Most terms have their usual meaning, but the following may be considered particu
 ## Language Basics
 
 ### Statements
-- **Statements** are either a *declaration*, *definition*, or *expression* followed by a comma.
+- A **statements** is either a *declaration*, a *definition*, or an *expression* followed by a comma.
 - Examples:
   - declaration
       - `x;`
@@ -107,14 +107,14 @@ Most terms have their usual meaning, but the following may be considered particu
     - `x := lambda[a,b: a + b] :;`
     - `x(t) := 0.5 * t :;`
     - Notes:
-      - Yes, the colon-semicolon is ugly, unfortunate effect of a flawed grammar. On the flip-side, one may view the content between the colons as a sort of "initialization" operator that sits between the identifier and semicolon.
+      - Yes, the colon-semicolon is an ugly, unfortunate effect of a flawed grammar. On the flip-side, one may view the content encapsulated between the colons as a sort of "initialization" operator that sits between the identifier and semicolon.
         - `x;` → `x:=2:;`
-      - Definition is not an operator in 403 and cannot be used in larger expressions. However, assignment is.
+      - Definition is not an operator in 403 and cannot be used in larger expressions. However, the assignment operator is.
   - expression
     - `x,`
     - `x + 2,`
     - `x == x + 2,`
-      - `==` is the assignment operator in 403, not the equality operator, which is `=`. They are switched in 403 on the grounds that this way appears more like conventional mathematics and discourages careless assignment.
+      - As noted previously, `==` is the assignment operator in 403, not the equality operator, which is `=`. They are switched in 403 on the grounds that this way appears more like conventional mathematics and discourages careless assignment.
     - `print(x),`
 
 ### Comments
@@ -160,9 +160,22 @@ Most terms have their usual meaning, but the following may be considered particu
       - Note: Array access also allows for an array element to be the left operand of assignment:
         - `a[5] == 0`
       - Note: This operator is applicable to anything that will evaluate to an array.
+        - Examples:
+            ```
+            f(n) :=
+                a := allocate(n) :;
+                i := 0 :;
+                while[ : i < n : a[i] == i, i == i + 1 ],
+                a
+                :;
+            println(f(10)[5]),
+            ```
     - function application, `(arguments)`, left
       - `f(1)`
       - Note: This operator is applicable to anything that will evaluate to a closure.
+        - Examples:
+            - `lambda[x: x * x](2)`
+            - `{ g(y) := y - 1 :; g }(5)`
     - Note: These can be mixed. For example:
       - `x[1](2)[3](4,5)`
 
@@ -206,7 +219,7 @@ Most terms have their usual meaning, but the following may be considered particu
     - Examples:
       `lambda[x,y: x^2 + y^2]`
 - There are two ways to define a function:
-  - Using lambdas:
+  - Using lambda-expressions:
     - `f := lambda[x: x + x] :;`
   - Using the form `function-name(parameters) := body :;`:
     - `f(x) := x + x :;`
@@ -214,7 +227,7 @@ Most terms have their usual meaning, but the following may be considered particu
   - The return value of the function is the value of the body (see the section on terminology).
 - Functions are called using the postfix function application operator `(arguments)`.
   - `f(1,2,3+4)`
-- explicit returns
+- **explicit returns**
   - You can explicitly return from the body of a function, as you would in other languages, with a twist: return is a type of object, whose behavior is to short-circuit the execution of the body, as will be explained below.
   - Example:
     ```
@@ -228,7 +241,7 @@ Most terms have their usual meaning, but the following may be considered particu
     - A return object is a return label paired with a value.
     - The value of a return object is the value of the expression to the right of the keyword `return`.
     - If a statement of a function body evaluates to a return object, the execution of the function body will be halted, the return label will be stripped from the return object, and the value of the return object will be returned as the value of the function.
-    - As objects, return objects can be passed around as any other objects and thus can lead to very strange programs!
+    - As objects, return objects can be passed around as any other objects and thus can be used to construct to very strange programs!
 
 ### Arrays
 - Arrays are allocated using the built-in function `allocate(size)`, where `size` is the number of elements. The elements can be anything.
@@ -257,7 +270,7 @@ Most terms have their usual meaning, but the following may be considered particu
 ### Conditionals
 - Conditionals are specified using the **if-expression**, whose form is:
     - `if[ condition1 ? action1 : condition2 ? action2 : ... : else default-action ]`
-    where there can be any positive integer number of condition-action pairs, and the default else-case is optional. Both the condition and action are bodies (see the section on terminology.)
+    where there can be any positive number of condition-action pairs, and the default else-case is optional. Both the condition and action are bodies (see the section on terminology.)
     - Example:
         ```
         if[ x > 2 ?
@@ -271,7 +284,7 @@ Most terms have their usual meaning, but the following may be considered particu
         ```
 - Being an expression, the if-expression can be used in larger expressions, for example:
     - `x == 2 + if[ x < 2 ? 5 : else 6 ]`
-- The value of an if-expression is the value of the body of the action taken, and is `UNINITIALIZED` otherwise.
+- The value of an if-expression is the value of the body of the action taken and is `UNINITIALIZED` if no action is taken.
 
 ### Loops
 - The only construct provided for iteration is the **while-expression**, whose form is:
@@ -285,7 +298,7 @@ Most terms have their usual meaning, but the following may be considered particu
     n := 5 :;
     x == 5 + while[ : i < n : i == i + 1 ],
     ```
-- The value of an while-expression is the value of the last expression evaluated thus far, and is `UNINITIALIZED` otherwise.
+- The value of an while-expression is the value of the last expression evaluated thus far and is `UNINITIALIZED` if no expression is evaluated.
 
 
 ### Parenthesized Expressions and Blocks
