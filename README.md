@@ -5,9 +5,77 @@ A programming project for CS403.
 println("Hello, world!"),
 ```
 
+### Examples
+Here are some examples of 403 code of various complexities. These examples can be found in `examples.403`.
+```
+! simple
+square(x) := x * x :;
+sqrt(x) := x ^ 0.5 :;
+magnitude(v) := sqrt(square(v[0]) + square(v[1])) :;
+v := allocate(2) :;
+v[0] == 5, v[1] == 6,
+
+println("The magnitude of vector <5,6> is ", magnitude(v), "."),
+
+! classic
+fib(n) :=
+    if[ n < 2 ?
+        n
+      : else
+        fib(n-1) + fib(n-2)
+      ]
+    :;
+
+println("The 6th fibonacci number is ", fib(6)),
+
+! what?
+f := allocate(5) :;
+
+{
+i := 0:;
+j := 0:;
+ while[ : i < sizeof(f) :
+        j == i mod 2,
+        f[i] == lambda[x: lambda[y,z: return x * (y - z) + i * j, return 0]],
+        i == i + 1
+      ]
+},
+
+g(z) := if[ z < 1 ? f : else fib ] :;
+
+println("1*(2-3) + 2*(2 mod 2) = ", g(0)[2](1)(2,3)),
+
+! streams
+stream_display(stream,n) :=
+    helper(stream,i) :=
+        if[ i < n ?
+            print(scar[stream]),
+            if[ i < (n-1) ?  print(",") ],
+            print(" "),
+            helper(scdr[stream],i+1)
+          ]
+        :;
+    print("("),
+    helper(stream,0),
+    println("...)")
+    :;
+
+integers_from(n) := scons[n,integers_from(n+1)] :;
+
+map(f,l) := scons[f(scar[l]),map(f,scdr[l])] :;
+
+integers := integers_from(1) :;
+
+squares := map(square,integers) :;
+
+stream_display(squares,10),
+```
+More examples are given in the `.403` files.
+
 ### Interpreter
 - The name of the interpreter is `403`, and it takes as an argument the filename of the input program to be processed. Example:
     - `403 program.403`
+- The conventional filename extension for 403 code is `.403`.
 - executable information (output of `file 403`):
   - ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 2.6.32, BuildID[sha1]=be282c884e01e66b5d846dde4af884c35d240d20, not stripped
 - options
@@ -100,6 +168,7 @@ Most terms have their usual meaning, but the following may be considered particu
 - **binary operators**, with their associativity and precedence
   - mutative
     - assignment, `==`, right, 0
+        - returns the right operand
   - relational
     - logical or, `or` or `+`, left, 1
         - short-circuiting
@@ -115,6 +184,7 @@ Most terms have their usual meaning, but the following may be considered particu
     - greater-than-or-equal-to, `>=`, left, 4
   - mathematical
     - plus, `+`, left, 5
+        - applying `+` to string operands returns the concatenated string
     - minus, `-`, left, 5
     - modulo, `mod`, left, 6
         - `mod` computes the remainder of Euclidean division
