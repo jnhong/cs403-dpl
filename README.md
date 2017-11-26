@@ -6,6 +6,8 @@ println("Hello, world!"),
 ```
 
 ### Interpreter
+- The name of the interpreter is `403`, and it takes as an argument the filename of the input program to be processed. Example:
+    - `403 program.403`
 - executable information (output of `file 403`):
   - ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 2.6.32, BuildID[sha1]=be282c884e01e66b5d846dde4af884c35d240d20, not stripped
 - options
@@ -17,16 +19,16 @@ Most terms have their usual meaning, but the following may be considered particu
 
 ### Rules of Thumb
 - Brackets are used to denote special-forms or close relation to special-forms and are used by:
-    - lambda-expressions
-    - if-expressions
-    - while-expressions
-    - stream functions
+    - *lambda-expressions*
+    - *if-expressions*
+    - *while-expressions*
+    - *stream functions*
 - As will be seen below, colons are extensively used to delimit the components of many expressions.
 
 ## Language Basics
 
 ### Statements
-- Statements are either a declaration, definition, or expression followed by a comma.
+- **Statements** are either a *declaration*, *definition*, or *expression* followed by a comma.
 - Examples:
   - declaration
       - `x;`
@@ -37,7 +39,7 @@ Most terms have their usual meaning, but the following may be considered particu
     - `x(t) := 0.5 * t :;`
     - Notes:
       - Yes, the colon-semicolon is ugly, unfortunate effect of a flawed grammar. On the flip-side, one may view the content between the colons as a sort of "initialization" operator that sits between the identifier and semicolon.
-        - `x;` -> `x:=2:;`
+        - `x;` → `x:=2:;`
       - Definition is not an operator in 403 and cannot be used in larger expressions. However, assignment is.
   - expression
     - `x,`
@@ -47,7 +49,7 @@ Most terms have their usual meaning, but the following may be considered particu
     - `print(x),`
 
 ### Comments
-- Comments are indicated using `!`, and extend to the next newline or `!`.
+- **Comments** are indicated using `!`, and extend to the next newline or `!`.
 - `!!` indicates a "super-comment" that extends to the next newline.
 - Examples:
   - `x == x + 1, ! this is a comment print(x),`
@@ -58,27 +60,27 @@ Most terms have their usual meaning, but the following may be considered particu
     - `print(x)` is commented out
 
 ### Basic Data Types
-- Integers
+- **integers**
   - `0, 1, 2, ...`
   - `-1, +1`
-- Reals
+- **reals**
   - `0.0, 1.0, 3.14, ...`
   - `-1.0, +1.0`
-- Boolean
+- **boolean**
   - `true, false`
-- Strings
+- **strings**
   - `"Hello, world!"`
   - escapable characters include `\n`, `\t`, `\b`, `\v`, `\f`, `\r`, `\a`, `"`, `\\`, with their usual meaning
   - attempting to escape a non-escapable character just returns the unmodified character
-- Other
+- other
   - `nil` is used to denote the empty list.
 
 ### Variables
-- Variables are dynamically typed and must be declared before being used
+- **Variables** are dynamically typed and must be declared before being used
 - Valid names are any that begin with an alphabetical character followed by any contiguous sequence of alphanumerical or underscore characters
 
 ### Operators
-- unary operators
+- **unary operators**
   - prefix
     - positive, `+`
     - negative, `-`
@@ -95,7 +97,7 @@ Most terms have their usual meaning, but the following may be considered particu
     - Note: These can be mixed. For example:
       - `x[1](2)[3](4,5)`
 
-- binary operators, with their associativity and precedence
+- **binary operators**, with their associativity and precedence
   - mutative
     - assignment, `==`, right, 0
   - relational
@@ -124,10 +126,10 @@ Most terms have their usual meaning, but the following may be considered particu
     - exponentiation, `^`, right, 6
 
 ### Functions
-- Functions are first-class objects.
+- **Functions** are first-class objects.
 - Valid names are the same as for variables.
-- lambda expressions
-  - The format of the lambda expression is:
+- **lambda-expressions**
+  - The format of the lambda-expression is:
     - `lambda[ parameters : body ]`
     where the parameters are comma-separated
     - Examples:
@@ -182,7 +184,7 @@ Most terms have their usual meaning, but the following may be considered particu
   these equivalences are quite literal, as the parser *literally* converts the former to the latter. (Try pretty printing it!)
 
 ### Conditionals
-- Conditionals are specified using the if-expression, whose form is:
+- Conditionals are specified using the **if-expression**, whose form is:
     - `if[ condition1 ? action1 : condition2 ? action2 : ... : else default-action ]`
     where there can be any positive integer number of condition-action pairs, and the default else-case is optional. Both the condition and action are bodies (see the section on terminology.)
     - Example:
@@ -201,7 +203,7 @@ Most terms have their usual meaning, but the following may be considered particu
 - The value of an if-expression is the value of the body of the action taken, and is `UNINITIALIZED` otherwise.
 
 ### Loops
-- The only construct provided for iteration is the while-expression, whose form is:
+- The only construct provided for iteration is the **while-expression**, whose form is:
     - `while[ pre-condition action : condition : post-condition action ]`
     where the action components are bodies without declarations/definitions and are both optional.
     - Note: Declarations are disallowed for obvious reasons.
@@ -215,12 +217,11 @@ Most terms have their usual meaning, but the following may be considered particu
 - The value of an while-expression is the value of the last expression evaluated thus far, and is `UNINITIALIZED` otherwise.
 
 
-
 ### Parenthesized Expressions and Blocks
 - An expression can be parenthesized to raise its precedence and/or remove the ambiguity of a larger expression.
   - Example:
     - `x + (a + b)`
-- A body of statements can be encapsulated in curly braces and treated as a unary whose value is the value of the final expression after evaluating the preceding statements in sequence. This is known as a block.
+- A body of statements can be encapsulated in curly braces and treated as a unary whose value is the value of the final expression after evaluating the preceding statements in sequence. This is known as a **block**.
   - Example:
     - `x + { i := 2 :; i + i } - 5`
   - A block has its own scope. Thus, a block can be used to restrict the scope of variables:
