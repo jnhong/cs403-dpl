@@ -35,11 +35,11 @@ f := allocate(5) :;
 {
 i := 0 :;
 j := 0 :;
- while[ : i < sizeof(f) :
-        j == i mod 2,
-        f[i] == lambda[x: lambda[y,z: return x * (y - z) + i * j, return 0]],
-        i == i + 1
-      ]
+while[ : i < sizeof(f) :
+       j == i mod 2,
+       f[i] == lambda[x: lambda[y,z: return x * (y - z) + i * j, return 0]],
+       i == i + 1
+     ]
 },
 
 g(z) := if[ z < 1 ? f : else fib ] :;
