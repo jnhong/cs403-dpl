@@ -1,0 +1,50 @@
+! ------- DPL NAME ------- !
+THE 403 PROGRAMMING LANGUAGE
+
+! -------  AUTHOR  ------- !
+JAMES HONG
+
+! ------- PROGRESS ------- !
+FINISHED.
+
+! -------------- MAKEFILE COMMANDS -------------- !
+
+All of the make commands specified by the programming assignment instructions are available:
+
+ - error{1..5}{,x,p}
+ - arrays{,x,p}
+ - conditionals{,x,p}
+ - recursion{,x,p}
+ - iteration{,x,p}
+ - functions{,x,p}
+ - lambda{,x,p}
+ - dictionary{,x,p}
+ And as an extra, 
+ - return{,x,p}
+
+No suffix simply prints out the input .403 code.
+Suffix 'x' executes the input .403 code.
+Suffix 'p' processes the .403 code through the pretty printer.
+
+For example,
+    $ make lambda
+will print the input .403 program.
+    $ make lambdax
+will execute the input .403 program.
+    $ make lambdap
+will pretty print the input .403 program.
+
+The interpreter executable is named "403"; however, as required by the task description, an executable shell script named "dpl" is provided that simply executes "403" the given filename.
+For example,
+    $ dpl lambda.403
+is equivalent to
+    $ 403 lambda.403
+
+Lastly,
+    $ make clean
+will remove object files and executables.
+
+
+! --------------     403 BASICS    -------------- !
+See README.md for language details.
+
